@@ -113,6 +113,7 @@ private extension [Color] {
         Color(red: 113/255, green: 190/255, blue: 255/255),
     ]
 }
+
 private extension Color {
 
     static let messageBackgroundColor = Color(red: 103/255, green: 77/255, blue: 122/255)
