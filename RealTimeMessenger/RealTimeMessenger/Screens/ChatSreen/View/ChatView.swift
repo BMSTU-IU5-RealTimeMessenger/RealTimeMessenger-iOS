@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ChatView: View {
-    @StateObject var viewModel = ChatViewModel()
-    @State private var text = ""
+    @EnvironmentObject var viewModel: ChatViewModel
+    @State private var messageText: String = .clear
 
     var body: some View {
         ScrollView {
@@ -22,14 +22,13 @@ struct ChatView: View {
         }
         .overlay(alignment: .bottom) {
             TextFieldBlock
-                .padding(.top, 6)
+                .padding(.vertical, 6)
                 .background(Color.bottomBackgroundColor)
         }
         .background {
             BackgroundView
                 .ignoresSafeArea()
         }
-        .onAppear(perform: viewModel.fetchData)
     }
 }
 
@@ -80,7 +79,7 @@ private extension ChatView {
         HStack {
             Image.paperClip
 
-            TextField("Message", text: $text)
+            TextField("Message", text: $messageText)
                 .padding(.vertical, 6)
                 .padding(.horizontal, 13)
                 .background(Color.textFieldBackgroundColor, in: .rect(cornerRadius: 20))
@@ -90,7 +89,13 @@ private extension ChatView {
                         .fill(Color.textFieldStrokeColor)
                 }
 
-            Image.record
+            Button {
+                print("ОТПРАВИТЬ СООБЩЕНИЕ")
+                viewModel.sendMessage(message: messageText)
+                messageText = ""
+            } label: {
+                Image.record
+            }
         }
         .padding(.horizontal, 8)
     }
@@ -99,7 +104,10 @@ private extension ChatView {
 // MARK: - Preview
 
 #Preview {
-    ChatView()
+    let viewModel = ChatViewModel()
+    viewModel.messages = .mockData
+    return ChatView()
+        .environmentObject(viewModel)
 }
 
 // MARK: - Constants
@@ -112,12 +120,4 @@ private extension [Color] {
         Color(red: 215/255, green: 161/255, blue: 255/255),
         Color(red: 113/255, green: 190/255, blue: 255/255),
     ]
-}
-
-private extension Color {
-
-    static let messageBackgroundColor = Color(red: 103/255, green: 77/255, blue: 122/255)
-    static let textFieldBackgroundColor = Color(red: 6/255, green: 6/255, blue: 6/255)
-    static let textFieldStrokeColor = Color(red: 58/255, green: 58/255, blue: 60/255)
-    static let bottomBackgroundColor = Color(red: 28/255, green: 28/255, blue: 29/255)
 }
