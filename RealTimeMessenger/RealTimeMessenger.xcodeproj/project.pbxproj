@@ -15,6 +15,9 @@
 		E502502A2B84479900FDC47E /* String+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50250292B84479900FDC47E /* String+Extenstions.swift */; };
 		E502502C2B8448E000FDC47E /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502502B2B8448E000FDC47E /* Navigation.swift */; };
 		E502502F2B844ACD00FDC47E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502502E2B844ACD00FDC47E /* Message.swift */; };
+		E56A9CAB2B85797100ECD187 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56A9CAA2B85797100ECD187 /* MessageBubble.swift */; };
+		E56A9CAD2B857B9000ECD187 /* View+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56A9CAC2B857B9000ECD187 /* View+Extenstions.swift */; };
+		E56A9CAF2B85AB8F00ECD187 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56A9CAE2B85AB8F00ECD187 /* DispatchQueue.swift */; };
 		E5808E222B82216C009283CE /* RealTimeMessengerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5808E212B82216C009283CE /* RealTimeMessengerApp.swift */; };
 		E5808E242B82216C009283CE /* PlaygroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5808E232B82216C009283CE /* PlaygroundView.swift */; };
 		E5808E262B82216D009283CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5808E252B82216D009283CE /* Assets.xcassets */; };
@@ -35,6 +38,9 @@
 		E50250292B84479900FDC47E /* String+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extenstions.swift"; sourceTree = "<group>"; };
 		E502502B2B8448E000FDC47E /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		E502502E2B844ACD00FDC47E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		E56A9CAA2B85797100ECD187 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
+		E56A9CAC2B857B9000ECD187 /* View+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extenstions.swift"; sourceTree = "<group>"; };
+		E56A9CAE2B85AB8F00ECD187 /* DispatchQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
 		E5808E1E2B82216C009283CE /* RealTimeMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealTimeMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5808E212B82216C009283CE /* RealTimeMessengerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealTimeMessengerApp.swift; sourceTree = "<group>"; };
 		E5808E232B82216C009283CE /* PlaygroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundView.swift; sourceTree = "<group>"; };
@@ -177,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				E5BDFC2D2B82DF06002E0B7E /* ChatView.swift */,
+				E56A9CAA2B85797100ECD187 /* MessageBubble.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -214,6 +221,8 @@
 				E50250242B84371700FDC47E /* Color+Extenstions.swift */,
 				E50250272B84478500FDC47E /* Date+Extenstions.swift */,
 				E50250292B84479900FDC47E /* String+Extenstions.swift */,
+				E56A9CAC2B857B9000ECD187 /* View+Extenstions.swift */,
+				E56A9CAE2B85AB8F00ECD187 /* DispatchQueue.swift */,
 			);
 			path = Extenstions;
 			sourceTree = "<group>";
@@ -291,6 +300,7 @@
 				E5BDFC382B82EDD5002E0B7E /* ChatViewModel+Mock.swift in Sources */,
 				E5BDFC3C2B82EE88002E0B7E /* Image+Extenstions.swift in Sources */,
 				E50250232B84367000FDC47E /* StartSreen.swift in Sources */,
+				E56A9CAD2B857B9000ECD187 /* View+Extenstions.swift in Sources */,
 				E5808E242B82216C009283CE /* PlaygroundView.swift in Sources */,
 				E5BDFC342B82ED3D002E0B7E /* ChatMessage.swift in Sources */,
 				E50250252B84371700FDC47E /* Color+Extenstions.swift in Sources */,
@@ -303,6 +313,8 @@
 				E502502F2B844ACD00FDC47E /* Message.swift in Sources */,
 				E50250202B84201700FDC47E /* WebSocketManager.swift in Sources */,
 				E502501D2B841E2D00FDC47E /* Logger.swift in Sources */,
+				E56A9CAB2B85797100ECD187 /* MessageBubble.swift in Sources */,
+				E56A9CAF2B85AB8F00ECD187 /* DispatchQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

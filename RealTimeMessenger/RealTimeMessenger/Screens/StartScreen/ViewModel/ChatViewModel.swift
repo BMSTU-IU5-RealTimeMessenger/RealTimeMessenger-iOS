@@ -18,6 +18,7 @@ protocol ChatViewModelProtocol: AnyObject {
 
 final class ChatViewModel: ObservableObject {
     @Published var messages: [ChatMessage] = []
+    @Published var lastMessageID: UUID?
     @Published var userName: String = .clear
     private var messagesCount = 0
 }
@@ -31,10 +32,12 @@ extension ChatViewModel: ChatViewModelProtocol {
         WebSockerManager.shared.connection()
         WebSockerManager.shared.send(
             message: Message(
+                id: UUID(),
                 kind: .connection,
                 userName: userName,
                 dispatchDate: Date(),
-                message: .clear
+                message: .clear, 
+                state: .progress
             )
         )
         receiveWebSocketData()
@@ -43,14 +46,17 @@ extension ChatViewModel: ChatViewModelProtocol {
     /// Sending message to the server
     /// - Parameter message: message data
     func sendMessage(message: String) {
-        WebSockerManager.shared.send(
-            message: Message(
-                kind: .message,
-                userName: userName,
-                dispatchDate: Date(),
-                message: message
-            )
+        let msg = Message(
+            id: UUID(),
+            kind: .message,
+            userName: userName,
+            dispatchDate: Date(),
+            message: message,
+            state: .progress
         )
+        lastMessageID = msg.id
+        messages.append(msg.mapper(userName: userName))
+        WebSockerManager.shared.send(message: msg)
     }
 }
 
@@ -62,16 +68,17 @@ private extension ChatViewModel {
     func receiveWebSocketData() {
         WebSockerManager.shared.receive { [weak self] message in
             guard let self else { return }
-            let chatMessage = ChatMessage(
-                id: messagesCount, // FIXME: Может быть сделать ID у message
-                isYou: message.userName == userName,
-                message: message.message,
-                userName: message.userName,
-                time: message.dispatchDate.formattedString(format: "HH:mm")
-            )
-            messagesCount += 1
-            DispatchQueue.main.async {
-                self.messages.append(chatMessage)
+            let chatMessage = message.mapper(userName: userName)
+            // Если сообщение не найденно, значит добавляем его
+            guard let index = messages.firstIndex(where: { $0.id == chatMessage.id }) else {
+                asyncMain {
+                    self.messages.append(chatMessage)
+                    self.lastMessageID = chatMessage.id
+                }
+                return
+            }
+            asyncMain {
+                self.messages[index] = chatMessage
             }
         }
     }

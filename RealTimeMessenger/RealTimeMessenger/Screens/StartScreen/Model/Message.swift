@@ -7,14 +7,22 @@
 
 import Foundation
 
-struct Message: Codable {
+struct Message: Codable, Identifiable {
+    var id: UUID
     let kind: MessageKind
     let userName: String
     let dispatchDate: Date
     let message: String
+    var state: State
 
     enum MessageKind: String, Codable {
         case connection
         case message
+    }
+
+    enum State: String, Codable {
+        case progress
+        case received
+        case error
     }
 }

@@ -12,22 +12,42 @@ struct ChatView: View {
     @State private var messageText: String = .clear
 
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(viewModel.messages, id: \.self.id) { message in
-                    MessageView(message: message)
-                        .padding(.horizontal, 14)
+        ScrollViewReader { proxy in
+            VStack(spacing: 0) {
+                ScrollView {
+                    LazyVStack {
+                        ForEach(viewModel.messages) { message in
+                            MessageBubble(message: message)
+                                .padding(.horizontal, 8)
+                        }
+                    }
+                    .padding(.bottom, 50)
+                }
+                .onTapGesture {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder),
+                        to: nil,
+                        from: nil,
+                        for: nil
+                    )
+                }
+
+                TextFieldBlock
+                    .padding(.vertical, 6)
+                    .background(Color.bottomBackgroundColor)
+            }
+            .frame(maxHeight: .infinity)
+            .onChange(of: viewModel.lastMessageID) { _, id in
+                if let id {
+                    withAnimation {
+                        proxy.scrollTo(id, anchor: .bottom)
+                    }
                 }
             }
-        }
-        .overlay(alignment: .bottom) {
-            TextFieldBlock
-                .padding(.vertical, 6)
-                .background(Color.bottomBackgroundColor)
-        }
-        .background {
-            BackgroundView
-                .ignoresSafeArea()
+            .background {
+                BackgroundView
+                    .ignoresSafeArea()
+            }
         }
     }
 }
@@ -50,31 +70,6 @@ private extension ChatView {
         }
     }
 
-    func MessageView(message: ChatMessage) -> some View {
-        HStack {
-            if message.isYou {
-                Spacer()
-            }
-
-            HStack(alignment: .bottom) {
-                Text(message.message)
-                    .padding(.vertical, 6)
-                    .padding(.leading, 10)
-
-                Text(message.time)
-                    .foregroundStyle(.white.opacity(0.63))
-                    .font(.system(size: 11, weight: .regular))
-                    .padding(.bottom, 4)
-                    .padding(.trailing, 12)
-            }
-            .background(Color.messageBackgroundColor, in: .rect(cornerRadius: 18))
-
-            if !message.isYou {
-                Spacer()
-            }
-        }
-    }
-
     var TextFieldBlock: some View {
         HStack {
             Image.paperClip
@@ -89,12 +84,21 @@ private extension ChatView {
                         .fill(Color.textFieldStrokeColor)
                 }
 
-            Button {
-                print("ОТПРАВИТЬ СООБЩЕНИЕ")
-                viewModel.sendMessage(message: messageText)
-                messageText = ""
-            } label: {
+            if messageText.isEmpty {
                 Image.record
+                    .frame(width: 22, height: 22)
+                
+            } else {
+                Button {
+                    viewModel.sendMessage(message: messageText)
+                    messageText = ""
+                } label: {
+                    Image(systemName: "paperplane")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 22, height: 22)
+                        .foregroundStyle(Color.iconColor)
+                }
             }
         }
         .padding(.horizontal, 8)
@@ -105,12 +109,20 @@ private extension ChatView {
 
 #Preview {
     let viewModel = ChatViewModel()
-    viewModel.messages = .mockData
+//    viewModel.messages = .mockData
+    viewModel.userName = "mightyK1ingRichard"
+//    viewModel.lastMessageID = [ChatMessage].mockData.last!.id
+    viewModel.connectWebSocket()
     return ChatView()
         .environmentObject(viewModel)
 }
 
 // MARK: - Constants
+
+private extension Color {
+
+    static let iconColor = Color(red: 127/255, green: 127/255, blue: 127/255)
+}
 
 private extension [Color] {
 

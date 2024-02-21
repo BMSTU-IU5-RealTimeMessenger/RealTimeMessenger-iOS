@@ -14,10 +14,12 @@ struct PlaygroundView: View {
                 WebSockerManager.shared.connection()
                 WebSockerManager.shared.send(
                     message: Message(
+                        id: UUID(),
                         kind: .connection,
                         userName: "mightyK1ngRichard",
                         dispatchDate: Date(),
-                        message: "подключение пользователя"
+                        message: "подключение пользователя",
+                        state: .progress
                     )
                 )
             } label: {

@@ -68,7 +68,7 @@ final class WebSockerManager: WebSocketManagerProtocol {
                         Logger.log(message: "Распарсили сообщение: [ \(message) ]")
                         completion(message)
                     } catch {
-                        Logger.log(kind: .error, message: "Не получилось распарсить сообщение: [ \(stringMessage) ] к тиму Message")
+                        Logger.log(kind: .error, message: "Не получилось распарсить сообщение: [ \(stringMessage) ] к типу Message.self")
                     }
                 @unknown default: break
                 }
