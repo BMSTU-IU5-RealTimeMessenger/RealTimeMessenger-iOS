@@ -18,6 +18,7 @@ struct Message: Codable, Identifiable {
     enum MessageKind: String, Codable {
         case connection
         case message
+        case close
     }
 
     enum State: String, Codable {

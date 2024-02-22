@@ -17,8 +17,16 @@ struct ChatView: View {
                 ScrollView {
                     LazyVStack {
                         ForEach(viewModel.messages) { message in
-                            MessageBubble(message: message)
-                                .padding(.horizontal, 8)
+                            switch message.kind {
+                            case .bubble:
+                                MessageBubble(message: message)
+                                    .padding(.horizontal, 8)
+                            case .join:
+                                MessageJoinText(userName: "\(message.userName) вступил в чат")
+
+                            case .quit:
+                                MessageJoinText(userName: "\(message.userName) покинул чат")
+                            }
                         }
                     }
                     .padding(.bottom, 50)
@@ -103,6 +111,16 @@ private extension ChatView {
             }
         }
         .padding(.horizontal, 8)
+    }
+
+    func MessageJoinText(userName: String) -> some View {
+        Text(userName)
+            .font(.caption)
+            .padding(.horizontal)
+            .padding(.vertical, 6)
+            .background(.black.opacity(0.7), in: .capsule)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
     }
 }
 

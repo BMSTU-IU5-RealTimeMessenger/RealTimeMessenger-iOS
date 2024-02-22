@@ -11,6 +11,15 @@ struct MessageBubble: View {
     let message: ChatMessage
 
     var body: some View {
+        DefaultMessage
+    }
+}
+
+// MARK: - Subviews
+
+private extension MessageBubble {
+
+    var DefaultMessage: some View {
         VStack(alignment: message.isYou ? .trailing : .leading) {
             HStack(alignment: .bottom) {
                 Text(message.message)

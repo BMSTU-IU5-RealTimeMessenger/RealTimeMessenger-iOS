@@ -54,7 +54,7 @@ extension ChatViewModel: ChatViewModelProtocol {
             state: .progress
         )
         lastMessageID = msg.id
-        messages.append(msg.mapper(userName: userName))
+        messages.append(msg.mapper(name: userName))
         WebSockerManager.shared.send(message: msg)
     }
     
@@ -92,7 +92,7 @@ private extension ChatViewModel {
     func receiveWebSocketData() {
         WebSockerManager.shared.receive { [weak self] message in
             guard let self else { return }
-            let chatMessage = message.mapper(userName: userName)
+            let chatMessage = message.mapper(name: userName)
             // Если сообщение не найденно, значит добавляем его
             guard let index = messages.firstIndex(where: { $0.id == chatMessage.id }) else {
                 asyncMain {
