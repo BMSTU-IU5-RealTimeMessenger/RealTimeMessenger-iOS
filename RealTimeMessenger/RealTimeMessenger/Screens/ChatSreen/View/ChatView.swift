@@ -49,6 +49,7 @@ struct ChatView: View {
                     .ignoresSafeArea()
             }
         }
+        .onDisappear(perform: viewModel.quitChat)
     }
 }
 
@@ -109,9 +110,7 @@ private extension ChatView {
 
 #Preview {
     let viewModel = ChatViewModel()
-//    viewModel.messages = .mockData
-    viewModel.userName = "mightyK1ingRichard"
-//    viewModel.lastMessageID = [ChatMessage].mockData.last!.id
+    viewModel.setPreviewData()
     viewModel.connectWebSocket()
     return ChatView()
         .environmentObject(viewModel)

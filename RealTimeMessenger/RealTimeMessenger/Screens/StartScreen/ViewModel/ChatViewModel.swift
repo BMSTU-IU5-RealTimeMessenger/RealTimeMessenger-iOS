@@ -17,10 +17,9 @@ protocol ChatViewModelProtocol: AnyObject {
 // MARK: - ChatViewModel
 
 final class ChatViewModel: ObservableObject {
-    @Published var messages: [ChatMessage] = []
-    @Published var lastMessageID: UUID?
-    @Published var userName: String = .clear
-    private var messagesCount = 0
+    @Published private(set) var messages: [ChatMessage] = []
+    @Published private(set) var lastMessageID: UUID?
+    @Published private(set) var userName: String = .clear
 }
 
 // MARK: - ChatViewModelProtocol
@@ -58,6 +57,31 @@ extension ChatViewModel: ChatViewModelProtocol {
         messages.append(msg.mapper(userName: userName))
         WebSockerManager.shared.send(message: msg)
     }
+    
+    /// Quit chat view
+    func quitChat() {
+        messages = []
+        lastMessageID = nil
+        userName = .clear
+        WebSockerManager.shared.close()
+    }
+}
+
+// MARK: - Reducers
+
+extension ChatViewModel {
+
+    func setUserName(name: String) {
+        userName = name
+    }
+
+    #if DEBUG
+    func setPreviewData() {
+        userName = "mightyK1ingRichard"
+        messages = .mockData
+        lastMessageID = [ChatMessage].mockData.last!.id
+    }
+    #endif
 }
 
 // MARK: - Private Methods
