@@ -19,10 +19,9 @@ struct StartView: View {
 
                 VStack(spacing: 0) {
                     VStack(alignment: .leading, spacing: 14) {
-                        Text(String.title)
-                            .font(.system(size: 32, weight: .bold))
+                        TitleText
 
-                        Text(String.subtitle)
+                        SubtitleText
                     }
                     .foregroundStyle(.white)
                     .frame(height: size.height * .fraction)
@@ -91,6 +90,19 @@ struct StartView: View {
 }
 
 // MARK: - Constants
+
+private extension StartView {
+
+    var TitleText: some View {
+        Text(String.title)
+            .font(.system(size: UIDevice.isIpad ? 60 : 32, weight: .bold))
+    }
+
+    var SubtitleText: some View {
+        Text(String.subtitle)
+            .font(.system(size: UIDevice.isIpad ? 28 : 16, weight: .regular))
+    }
+}
 
 private extension String {
 

@@ -22,10 +22,10 @@ struct ChatView: View {
                                 MessageBubble(message: message)
                                     .padding(.horizontal, 8)
                             case .join:
-                                MessageJoinText(userName: "\(message.userName) вступил в чат")
+                                MessageJoinText(userName: .joinChatMessage(userName: message.userName))
 
                             case .quit:
-                                MessageJoinText(userName: "\(message.userName) покинул чат")
+                                MessageJoinText(userName: .quitChatMessage(userName: message.userName))
                             }
                         }
                     }
@@ -128,13 +128,19 @@ private extension ChatView {
 
 #Preview {
     let viewModel = ChatViewModel()
-    viewModel.setPreviewData()
+    viewModel.setPreviewData(name: "mightyK1ngRichard", messages: [])
     viewModel.connectWebSocket()
     return ChatView()
         .environmentObject(viewModel)
 }
 
 // MARK: - Constants
+
+private extension String {
+
+    static func joinChatMessage(userName: String) -> String { "\(userName) вступил в чат" }
+    static func quitChatMessage(userName: String) -> String { "\(userName) покинул чат" }
+}
 
 private extension Color {
 

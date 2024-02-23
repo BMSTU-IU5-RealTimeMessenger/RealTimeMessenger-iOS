@@ -12,4 +12,8 @@ extension UIDevice {
     static var isSe: Bool {
         UIDevice.current.name == "iPhone SE (3rd generation)"
     }
+
+    static var isIpad: Bool {
+        UIDevice.current.model == "iPad"
+    }
 }

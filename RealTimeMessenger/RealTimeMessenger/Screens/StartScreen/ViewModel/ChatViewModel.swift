@@ -75,13 +75,13 @@ extension ChatViewModel {
         userName = name
     }
 
-    #if DEBUG
-    func setPreviewData() {
-        userName = "mightyK1ingRichard"
-        messages = .mockData
-        lastMessageID = [ChatMessage].mockData.last!.id
+#if DEBUG
+    func setPreviewData(name: String, messages: [ChatMessage] = .mockData, lastMessage: UUID? = nil) {
+        self.userName = name
+        self.messages = messages
+        self.lastMessageID = lastMessage
     }
-    #endif
+#endif
 }
 
 // MARK: - Private Methods
