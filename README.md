@@ -1,4 +1,4 @@
-# RealTimeMassenger-iOS
+# RealTimeMessenger-iOS
  iOS application
 
 ## Preview
