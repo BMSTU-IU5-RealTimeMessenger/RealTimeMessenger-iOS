@@ -10,8 +10,9 @@ import Foundation
 // MARK: - ChatViewModelProtocol
 
 protocol ChatViewModelProtocol: AnyObject {
-    func connectWebSocket()
+    func connectWebSocket(completion: MRKGenericBlock<APIError?>?)
     func sendMessage(message: String)
+    func didTapSignIn(userName: String, completion: @escaping MRKGenericBlock<APIError?>)
 }
 
 // MARK: - ChatViewModel
@@ -27,19 +28,30 @@ final class ChatViewModel: ObservableObject {
 extension ChatViewModel: ChatViewModelProtocol {
     
     /// Create web socket connection with the server
-    func connectWebSocket() {
-        WebSockerManager.shared.connection()
-        WebSockerManager.shared.send(
-            message: Message(
-                id: UUID(),
-                kind: .connection,
-                userName: userName,
-                dispatchDate: Date(),
-                message: .clear, 
-                state: .progress
+    func connectWebSocket(completion: MRKGenericBlock<APIError?>? = nil) {
+        WebSockerManager.shared.connection { [weak self] error in
+            guard let self else { return }
+            if let error {
+                asyncMain {
+                    completion?(.error(error))
+                }
+                return
+            }
+            asyncMain {
+                completion?(nil)
+            }
+            WebSockerManager.shared.send(
+                message: Message(
+                    id: UUID(),
+                    kind: .connection,
+                    userName: userName,
+                    dispatchDate: Date(),
+                    message: .clear,
+                    state: .progress
+                )
             )
-        )
-        receiveWebSocketData()
+            receiveWebSocketData()
+        }
     }
     
     /// Sending message to the server
@@ -65,24 +77,27 @@ extension ChatViewModel: ChatViewModelProtocol {
         userName = .clear
         WebSockerManager.shared.close()
     }
+    
+    /// Did tap sign in button
+    /// - Parameter userName: the entered name
+    func didTapSignIn(userName: String, completion: @escaping MRKGenericBlock<APIError?>) {
+        self.userName = userName
+        connectWebSocket(completion: completion)
+    }
 }
 
 // MARK: - Reducers
 
+#if DEBUG
 extension ChatViewModel {
 
-    func setUserName(name: String) {
-        userName = name
-    }
-
-#if DEBUG
     func setPreviewData(name: String, messages: [ChatMessage] = .mockData, lastMessage: UUID? = nil) {
         self.userName = name
         self.messages = messages
         self.lastMessageID = lastMessage
     }
-#endif
 }
+#endif
 
 // MARK: - Private Methods
 

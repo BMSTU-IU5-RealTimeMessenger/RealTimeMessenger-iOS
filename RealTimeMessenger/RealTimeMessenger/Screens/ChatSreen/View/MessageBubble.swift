@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MessageBubble: View {
     let message: ChatMessage
+    var isYou: Bool { message.isYou }
 
     var body: some View {
         DefaultMessage
@@ -20,33 +21,59 @@ struct MessageBubble: View {
 private extension MessageBubble {
 
     var DefaultMessage: some View {
-        VStack(alignment: message.isYou ? .trailing : .leading) {
-            HStack(alignment: .bottom) {
-                Text(message.message)
-                    .padding(.vertical, 6)
-                    .padding(.leading, 10)
-
-                HStack(spacing: 3) {
-                    Text(message.time)
-                        .foregroundStyle(.white.opacity(0.63))
-                        .font(.system(size: 11, weight: .regular))
-
-                    if message.isYou {
-                        message.state.image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 14, height: 14)
-                            .padding(.trailing, 5)
-                            .foregroundStyle(message.state.imageColor)
-                    }
-                }
-                .padding(.bottom, 4)
+        HStack(alignment: .bottom) {
+            if !isYou {
+                PersoneAvatar
             }
-            .padding(.trailing, 6)
-            .background(Color.messageBackgroundColor, in: .rect(cornerRadius: 18))
-            .frame(maxWidth: 320, alignment: message.isYou ? .trailing : .leading)
+
+            VStack(alignment: isYou ? .trailing : .leading) {
+                VStack(alignment: .leading, spacing: 2) {
+                    if !isYou {
+                        Text(message.userName)
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.mint.gradient)
+                    }
+
+                    HStack(alignment: .bottom) {
+                        Text(message.message)
+
+                        HStack(spacing: 3) {
+                            Text(message.time)
+                                .foregroundStyle(.white.opacity(0.63))
+                                .font(.system(size: 11, weight: .semibold))
+
+                            if isYou {
+                                message.state.image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 14, height: 14)
+                                    .padding(.trailing, 5)
+                                    .foregroundStyle(message.state.imageColor)
+                            }
+                        }
+                    }
+                    .padding(.bottom, 4)
+                }
+                .padding(.leading, 10)
+                .padding([.top], 6)
+                .padding(.trailing, isYou ? 2 : 8)
+                .background(Color.messageBackgroundColor, in: .rect(cornerRadius: 18))
+                .frame(maxWidth: 320, alignment: isYou ? .trailing : .leading)
+            }
         }
-        .frame(maxWidth: .infinity, alignment: message.isYou ? .trailing : .leading)
+        .frame(maxWidth: .infinity, alignment: isYou ? .trailing : .leading)
+    }
+
+    var PersoneAvatar: some View {
+        Circle()
+            .fill(.mint.gradient)
+            .frame(width: 32, height: 32)
+            .overlay {
+                Text("\(message.userName.first?.description.uppercased() ?? "😎")")
+                    .foregroundStyle(.white)
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
+            }
     }
 }
 
@@ -79,7 +106,7 @@ private extension Message.State {
                 isYou: true,
                 message: .message,
                 userName: "mightyK1ngRichard",
-                time: "10:10", 
+                time: "10:10",
                 state: .received
             )
         )
@@ -88,7 +115,7 @@ private extension Message.State {
             message: .init(
                 isYou: false,
                 message: "Воу рил неплохо",
-                userName: "mightyK1ngRichard",
+                userName: "Пермяков Дмитрий",
                 time: "10:10",
                 state: .error
             )

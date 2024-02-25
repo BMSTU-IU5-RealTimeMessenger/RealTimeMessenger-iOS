@@ -21,6 +21,7 @@ struct ChatView: View {
                             case .bubble:
                                 MessageBubble(message: message)
                                     .padding(.horizontal, 8)
+                                
                             case .join:
                                 MessageJoinText(userName: .joinChatMessage(userName: message.userName))
 
@@ -83,7 +84,7 @@ private extension ChatView {
         HStack {
             Image.paperClip
 
-            TextField("Message", text: $messageText)
+            TextField(String.placeholder, text: $messageText)
                 .padding(.vertical, 6)
                 .padding(.horizontal, 13)
                 .background(Color.textFieldBackgroundColor, in: .rect(cornerRadius: 20))
@@ -100,9 +101,9 @@ private extension ChatView {
             } else {
                 Button {
                     viewModel.sendMessage(message: messageText)
-                    messageText = ""
+                    messageText = .clear
                 } label: {
-                    Image(systemName: "paperplane")
+                    Image(systemName: .paperplane)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 22, height: 22)
@@ -138,6 +139,8 @@ private extension ChatView {
 
 private extension String {
 
+    static let placeholder = "Message"
+    static let paperplane = "paperplane"
     static func joinChatMessage(userName: String) -> String { "\(userName) вступил в чат" }
     static func quitChatMessage(userName: String) -> String { "\(userName) покинул чат" }
 }

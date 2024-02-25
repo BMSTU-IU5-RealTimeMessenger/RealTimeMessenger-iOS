@@ -10,10 +10,10 @@ import Foundation
 // MARK: - WebSocketManagerProtocol
 
 protocol WebSocketManagerProtocol: AnyObject {
-    func connection()
+    func connection(completion: @escaping MRKGenericBlock<Error?>)
     func close()
     func send(message: Message)
-    func receive(completion: @escaping (Message) -> Void)
+    func receive(completion: @escaping MRKGenericBlock<Message>)
 }
 
 // MARK: - WebSockerManager
@@ -24,11 +24,11 @@ final class WebSockerManager: WebSocketManagerProtocol {
     private let wsPath = "ws://localhost:8080/socket"
     private init() {}
 
-    func connection() {
-        guard webSocketTask == nil else { return }
+    func connection(completion: @escaping MRKGenericBlock<Error?>) {
         guard let url = URL(string: wsPath) else { return }
         webSocketTask = URLSession(configuration: .default).webSocketTask(with: url)
         webSocketTask?.resume()
+        webSocketTask?.sendPing(pongReceiveHandler: completion)
     }
 
     func close() {
@@ -51,7 +51,7 @@ final class WebSockerManager: WebSocketManagerProtocol {
         }
     }
 
-    func receive(completion: @escaping (Message) -> Void) {
+    func receive(completion: @escaping MRKGenericBlock<Message>) {
         webSocketTask?.receive { [weak self] result in
             guard let self, webSocketTask != nil else { return }
             switch result {
@@ -65,10 +65,12 @@ final class WebSockerManager: WebSocketManagerProtocol {
                     guard let data = stringMessage.data(using: .utf8) else { return }
                     do {
                         let message = try JSONDecoder().decode(Message.self, from: data)
-                        Logger.log(message: "Распарсили сообщение: [ \(message) ]")
                         completion(message)
                     } catch {
-                        Logger.log(kind: .error, message: "Не получилось распарсить сообщение: [ \(stringMessage) ] к типу Message.self")
+                        Logger.log(
+                            kind: .error,
+                            message: "Не получилось распарсить сообщение: [ \(stringMessage) ] к типу Message.self.\n [ \(error.localizedDescription) ]"
+                        )
                     }
                 @unknown default: break
                 }

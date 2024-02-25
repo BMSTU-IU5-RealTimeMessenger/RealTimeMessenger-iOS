@@ -11,4 +11,5 @@ extension CGFloat {
 
     var half: CGFloat { self / 2 }
     var duel: CGFloat { self * 2 }
+    var squared: CGFloat { self * self }
 }
