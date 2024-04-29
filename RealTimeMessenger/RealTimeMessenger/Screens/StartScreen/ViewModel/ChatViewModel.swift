@@ -29,25 +29,26 @@ extension ChatViewModel: ChatViewModelProtocol {
     
     /// Create web socket connection with the server
     func connectWebSocket(completion: MRKGenericBlock<APIError?>? = nil) {
+        let mainQueueCompletion: MRKGenericBlock<APIError?> = { error in
+            DispatchQueue.main.async {
+                completion?(error)
+            }
+        }
+
         WebSockerManager.shared.connection { [weak self] error in
             guard let self else { return }
             if let error {
-                asyncMain {
-                    completion?(.error(error))
-                }
+                mainQueueCompletion(.error(error))
                 return
             }
-            asyncMain {
-                completion?(nil)
-            }
+            mainQueueCompletion(nil)
             WebSockerManager.shared.send(
                 message: Message(
                     id: UUID(),
                     kind: .connection,
                     userName: userName,
                     dispatchDate: Date(),
-                    message: .clear,
-                    state: .progress
+                    message: .clear
                 )
             )
             receiveWebSocketData()
@@ -55,15 +56,13 @@ extension ChatViewModel: ChatViewModelProtocol {
     }
     
     /// Sending message to the server
-    /// - Parameter message: message data
     func sendMessage(message: String) {
         let msg = Message(
             id: UUID(),
             kind: .message,
             userName: userName,
             dispatchDate: Date(),
-            message: message,
-            state: .progress
+            message: message
         )
         lastMessageID = msg.id
         messages.append(msg.mapper(name: userName))
@@ -79,10 +78,28 @@ extension ChatViewModel: ChatViewModelProtocol {
     }
     
     /// Did tap sign in button
-    /// - Parameter userName: the entered name
     func didTapSignIn(userName: String, completion: @escaping MRKGenericBlock<APIError?>) {
         self.userName = userName
         connectWebSocket(completion: completion)
+    }
+}
+
+// MARK: - Private Methods
+
+private extension ChatViewModel {
+    
+    /// Getting new message
+    func receiveWebSocketData() {
+        WebSockerManager.shared.receive { [weak self] message in
+            guard let self else { return }
+            let chatMessage = message.mapper(name: userName)
+            // Если сообщение не найденно, значит добавляем его
+            guard !messages.contains(where: { $0.id == chatMessage.id }) else { return }
+            DispatchQueue.main.async {
+                self.messages.append(chatMessage)
+                self.lastMessageID = chatMessage.id
+            }
+        }
     }
 }
 
@@ -98,27 +115,3 @@ extension ChatViewModel {
     }
 }
 #endif
-
-// MARK: - Private Methods
-
-private extension ChatViewModel {
-    
-    /// Getting new message
-    func receiveWebSocketData() {
-        WebSockerManager.shared.receive { [weak self] message in
-            guard let self else { return }
-            let chatMessage = message.mapper(name: userName)
-            // Если сообщение не найденно, значит добавляем его
-            guard let index = messages.firstIndex(where: { $0.id == chatMessage.id }) else {
-                asyncMain {
-                    self.messages.append(chatMessage)
-                    self.lastMessageID = chatMessage.id
-                }
-                return
-            }
-            asyncMain {
-                self.messages[index] = chatMessage
-            }
-        }
-    }
-}

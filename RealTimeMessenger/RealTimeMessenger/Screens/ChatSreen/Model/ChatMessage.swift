@@ -13,13 +13,13 @@ struct ChatMessage: Identifiable, Hashable {
     let message: String
     let userName: String
     let time: String
-    let state: Message.State
     var kind: Kind = .bubble
 
     enum Kind {
         case bubble
         case join
         case quit
+        case error
     }
 }
 
@@ -34,7 +34,6 @@ extension Message {
             message: message,
             userName: userName,
             time: dispatchDate.formattedString(format: "HH:mm"),
-            state: state,
             kind: kind.toChatKind
         )
     }
@@ -47,6 +46,7 @@ private extension Message.MessageKind {
         case .connection: return .join
         case .message: return .bubble
         case .close: return .quit
+        case .error: return .error
         }
     }
 }
