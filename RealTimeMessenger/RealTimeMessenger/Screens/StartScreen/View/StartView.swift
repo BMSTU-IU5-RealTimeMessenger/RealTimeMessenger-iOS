@@ -27,6 +27,7 @@ struct StartView: View {
                 .frame(width: size.width, height: size.height)
                 .offset(y: -size.height.half.half.half)
                 .background(BackgoundShapes(size: size))
+                .background(Constants.bgColor)
                 .overlay(alignment: .bottom) {
                     StartButton
                         .padding(.bottom, size.height.half.half * 0.7)
@@ -51,9 +52,8 @@ struct StartView: View {
             )
         }
         .tint(.white)
-        .preferredColorScheme(.dark)
         .alert(
-            String.alertTitle,
+            Constants.alertTitle,
             isPresented: $showAlert,
             presenting: alertMessage
         ) { _ in } message: { errorMessage in
@@ -66,7 +66,7 @@ private extension StartView {
 
     func BackgoundShapes(size: CGSize) -> some View {
         Rectangle()
-            .fill(LinearGradient.bgGradient)
+            .fill(Constants.bgGradient)
             .frame(
                 width: size.width * 0.9,
                 height: pow((size.width.squared + size.height.squared), 0.5)
@@ -76,7 +76,7 @@ private extension StartView {
     }
 
     var TitleView: some View {
-        Text(String.title)
+        Text(Constants.title)
             .font(.system(size: UIDevice.isIpad ? 50 : 30, weight: .bold, design: .rounded))
             .frame(maxWidth: .infinity, alignment: .topLeading)
             .padding(.leading)
@@ -88,7 +88,7 @@ private extension StartView {
             .font(.system(size: 18, weight: .semibold, design: .rounded))
             .padding(.horizontal)
             .placeholder(when: text.isEmpty) {
-                Text(String.placeholder)
+                Text(Constants.placeholder)
                     .foregroundColor(.white.opacity(0.7))
                     .padding(.leading)
                     .horizontalAlignment(.leading)
@@ -112,13 +112,13 @@ private extension StartView {
                 nav.path.append(text)
             }
         } label: {
-            Text(String.startMesseging)
+            Text(Constants.startMesseging)
                 .font(.system(size: 16, weight: .regular))
                 .tint(.white)
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
-        .background(LinearGradient.bgGradient, in: .capsule)
+        .background(Constants.bgGradient, in: .capsule)
         .disabled(text.isEmpty)
     }
 }
@@ -131,19 +131,18 @@ private extension StartView {
 
 // MARK: - Constants
 
-private extension LinearGradient {
+private extension StartView {
 
-    static let bgGradient = LinearGradient(
-        colors: [.pink, .purple],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-}
-
-private extension String {
-
-    static let alertTitle = "Ошибка входа"
-    static let title = "Welcome to\nRealTimeMessenger"
-    static let placeholder = "Введите имя пользователя"
-    static let startMesseging = "Войти в чат"
+    enum Constants {
+        static let alertTitle = "Ошибка входа"
+        static let title = "Welcome to\nRealTimeMessenger"
+        static let placeholder = "Введите имя пользователя"
+        static let startMesseging = "Войти в чат"
+        static let bgColor = MKRColor<BackgroundPalette>.bgSecondary.color
+        static let bgGradient = LinearGradient(
+            colors: [.pink, .purple],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
 }

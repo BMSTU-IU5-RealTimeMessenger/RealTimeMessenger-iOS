@@ -25,7 +25,7 @@ private extension MessageBubble {
             if !isYou {
                 PersoneAvatar
             }
-
+            
             VStack(alignment: isYou ? .trailing : .leading) {
                 VStack(alignment: .leading, spacing: 2) {
                     if !isYou {
@@ -36,28 +36,18 @@ private extension MessageBubble {
 
                     HStack(alignment: .bottom) {
                         Text(message.message)
+                            .foregroundStyle(Constants.textColor)
 
-                        HStack(spacing: 3) {
-                            Text(message.time)
-                                .foregroundStyle(.white.opacity(0.63))
-                                .font(.system(size: 11, weight: .semibold))
-
-                            if isYou {
-                                message.state.image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 14, height: 14)
-                                    .padding(.trailing, 5)
-                                    .foregroundStyle(message.state.imageColor)
-                            }
-                        }
+                        Text(message.time)
+                            .foregroundStyle(.white.opacity(0.63))
+                            .font(.system(size: 11, weight: .semibold))
                     }
                     .padding(.bottom, 4)
                 }
                 .padding(.leading, 10)
                 .padding([.top], 6)
-                .padding(.trailing, isYou ? 2 : 8)
-                .background(Color.messageBackgroundColor, in: .rect(cornerRadius: 18))
+                .padding(.trailing, 8)
+                .background(Constants.messageBackgroundColor, in: .rect(cornerRadius: 18))
                 .frame(maxWidth: 320, alignment: isYou ? .trailing : .leading)
             }
         }
@@ -77,26 +67,6 @@ private extension MessageBubble {
     }
 }
 
-// MARK: - Message State
-
-private extension Message.State {
-
-    var image: Image {
-        switch self {
-        case .error: return Image.errorImage
-        case .received: return Image.receivedImage
-        case .progress: return Image.progressImage
-        }
-    }
-
-    var imageColor: Color {
-        switch self {
-        case .error: return Color(red: 1, green: 0, blue: 0)
-        default: return .white.opacity(0.63)
-        }
-    }
-}
-
 // MARK: - Preview
 
 #Preview {
@@ -106,8 +76,7 @@ private extension Message.State {
                 isYou: true,
                 message: .message,
                 userName: "mightyK1ngRichard",
-                time: "10:10",
-                state: .received
+                time: "10:10"
             )
         )
 
@@ -116,8 +85,7 @@ private extension Message.State {
                 isYou: false,
                 message: "Воу рил неплохо",
                 userName: "Пермяков Дмитрий",
-                time: "10:10",
-                state: .error
+                time: "10:10"
             )
         )
     }
@@ -125,9 +93,10 @@ private extension Message.State {
 
 // MARK: - Constants
 
-private extension Image {
+private extension MessageBubble {
 
-    static let receivedImage = Image("checkMark2")
-    static let errorImage    = Image(systemName: "exclamationmark.arrow.circlepath")
-    static let progressImage = Image(systemName: "clock.arrow.circlepath")
+    enum Constants {
+        static let messageBackgroundColor = MKRColor<BackgroundPalette>.messageBackgroundColor
+        static let textColor = MKRColor<TextPalette>.textWhite.color
+    }
 }

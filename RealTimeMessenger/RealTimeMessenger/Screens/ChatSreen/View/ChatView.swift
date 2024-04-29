@@ -13,21 +13,11 @@ struct ChatView: View {
 
     var body: some View {
         ScrollViewReader { proxy in
-            VStack(spacing: 0) {
+            ZStack(alignment: .bottom) {
                 ScrollView {
                     LazyVStack {
                         ForEach(viewModel.messages) { message in
-                            switch message.kind {
-                            case .bubble:
-                                MessageBubble(message: message)
-                                    .padding(.horizontal, 8)
-                                
-                            case .join:
-                                MessageJoinText(userName: .joinChatMessage(userName: message.userName))
-
-                            case .quit:
-                                MessageJoinText(userName: .quitChatMessage(userName: message.userName))
-                            }
+                            MessageBlockView(message: message)
                         }
                     }
                     .padding(.bottom, 50)
@@ -43,9 +33,8 @@ struct ChatView: View {
 
                 TextFieldBlock
                     .padding(.vertical, 6)
-                    .background(Color.bottomBackgroundColor)
+                    .background(.ultraThinMaterial)
             }
-            .frame(maxHeight: .infinity)
             .onChange(of: viewModel.lastMessageID) { _, id in
                 if let id {
                     withAnimation {
@@ -66,14 +55,36 @@ struct ChatView: View {
 
 private extension ChatView {
 
+    @ViewBuilder
+    func MessageBlockView(message: ChatMessage) -> some View {
+        switch message.kind {
+        case .bubble:
+            MessageBubble(message: message)
+                .padding(.horizontal, 8)
+
+        case .join:
+            MessageJoinText(
+                text: Constants.joinChatMessage(userName: message.userName)
+            )
+
+        case .quit:
+            MessageJoinText(
+                text: Constants.quitChatMessage(userName: message.userName)
+            )
+
+        case .error:
+            MessageJoinText(text: "Ошибка отправки сообщения")
+        }
+    }
+
     var BackgroundView: some View {
         LinearGradient(
-            colors: .gradientBackgroundColor,
+            colors: Constants.gradientBackgroundColor,
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
         .mask {
-            Image.tgBackground
+            Constants.tgBackground
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -84,14 +95,14 @@ private extension ChatView {
         HStack {
             Image.paperClip
 
-            TextField(String.placeholder, text: $messageText)
+            TextField(Constants.placeholder, text: $messageText)
                 .padding(.vertical, 6)
                 .padding(.horizontal, 13)
-                .background(Color.textFieldBackgroundColor, in: .rect(cornerRadius: 20))
+                .background(Constants.textFieldBackgroundColor, in: .rect(cornerRadius: 20))
                 .overlay {
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(lineWidth: 1)
-                        .fill(Color.textFieldStrokeColor)
+                        .fill(Constants.textFieldStrokeColor)
                 }
 
             if messageText.isEmpty {
@@ -103,19 +114,19 @@ private extension ChatView {
                     viewModel.sendMessage(message: messageText)
                     messageText = .clear
                 } label: {
-                    Image(systemName: .paperplane)
+                    Image(systemName: Constants.paperplane)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 22, height: 22)
-                        .foregroundStyle(Color.iconColor)
+                        .foregroundStyle(Constants.iconColor)
                 }
             }
         }
         .padding(.horizontal, 8)
     }
 
-    func MessageJoinText(userName: String) -> some View {
-        Text(userName)
+    func MessageJoinText(text: String) -> some View {
+        Text(text)
             .font(.caption)
             .padding(.horizontal)
             .padding(.vertical, 6)
@@ -129,33 +140,34 @@ private extension ChatView {
 
 #Preview {
     let viewModel = ChatViewModel()
-    viewModel.setPreviewData(name: "mightyK1ngRichard", messages: [])
-    viewModel.connectWebSocket()
+    viewModel.connectWebSocket { _ in 
+        viewModel.setPreviewData(name: "mightyK1ngRichard", messages: [])
+        viewModel.connectWebSocket()
+    }
     return ChatView()
         .environmentObject(viewModel)
 }
 
 // MARK: - Constants
 
-private extension String {
+private extension ChatView {
 
-    static let placeholder = "Message"
-    static let paperplane = "paperplane"
-    static func joinChatMessage(userName: String) -> String { "\(userName) вступил в чат" }
-    static func quitChatMessage(userName: String) -> String { "\(userName) покинул чат" }
-}
-
-private extension Color {
-
-    static let iconColor = Color(red: 127/255, green: 127/255, blue: 127/255)
-}
-
-private extension [Color] {
-
-    static let gradientBackgroundColor: [Color] = [
-        Color(red: 168/255, green: 255/255, blue: 59/255),
-        Color(red: 111/255, green: 135/255, blue: 255/255),
-        Color(red: 215/255, green: 161/255, blue: 255/255),
-        Color(red: 113/255, green: 190/255, blue: 255/255),
-    ]
+    enum Constants {
+        static let tgBackground: Image = .tgBackground
+        static let placeholder = "Message"
+        static let paperplane = "paperplane"
+        static func joinChatMessage(userName: String) -> String { "\(userName) вступил в чат" }
+        static func quitChatMessage(userName: String) -> String { "\(userName) покинул чат" }
+        static let messageBackgroundColor = Color(red: 103/255, green: 77/255, blue: 122/255)
+        static let textColor: Color = MKRColor<TextPalette>.textPrimary.color
+        static let textFieldBackgroundColor = MKRColor<BackgroundPalette>.bgPrimary.color
+        static let textFieldStrokeColor = MKRColor<SeparatorPalette>.textFieldStrokeColor.color
+        static let iconColor = Color(red: 127/255, green: 127/255, blue: 127/255)
+        static let gradientBackgroundColor: [Color] = [
+            Color(red: 168/255, green: 255/255, blue: 59/255),
+            Color(red: 111/255, green: 135/255, blue: 255/255),
+            Color(red: 215/255, green: 161/255, blue: 255/255),
+            Color(red: 113/255, green: 190/255, blue: 255/255),
+        ]
+    }
 }
