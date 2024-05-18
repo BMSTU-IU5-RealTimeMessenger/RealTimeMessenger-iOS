@@ -8,7 +8,7 @@
 import Foundation
 
 struct Message: Codable, Identifiable {
-    var id: UUID
+    var id: String
     let kind: MessageKind
     let userName: String
     let dispatchDate: Date

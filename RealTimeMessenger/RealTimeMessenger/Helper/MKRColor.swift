@@ -46,8 +46,9 @@ extension MKRColor where Palette == BackgroundPalette {
     static let bottomBackgroundColor = Color(red: 28/255, green: 28/255, blue: 29/255)
     /// Черный белый фон
     static let bgPrimary = MKRColor(hexLight: 0xF9F9F9, hexDark: 0x060606)
+    static let bgInfo = MKRColor(hexLight: 0xE9E9E9, hexDark: 0x000000)
     /// Черный с серым
-    static let bgSecondary = MKRColor(hexLight: 0xBFBFBF, hexDark: 0x060606)
+    static let bgSecondary = MKRColor(hexLight: 0xE7E7E7, hexDark: 0x060606)
 }
 
 // MARK: - TextPalette

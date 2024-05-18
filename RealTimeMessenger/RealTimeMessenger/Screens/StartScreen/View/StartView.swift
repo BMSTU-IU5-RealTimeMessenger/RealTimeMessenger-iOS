@@ -12,7 +12,7 @@ struct StartView: View {
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = .clear
     @StateObject private var nav = Navigation()
-    @StateObject private var viewModel = ChatViewModel()
+    @State private var viewModel = ChatViewModel()
 
     var body: some View {
         NavigationStack(path: $nav.path) {
@@ -33,25 +33,25 @@ struct StartView: View {
                         .padding(.bottom, size.height.half.half * 0.7)
                 }
             }
+            .onTapGesture {
+                UIApplication.shared.sendAction(
+                    #selector(UIResponder.resignFirstResponder),
+                    to: nil,
+                    from: nil,
+                    for: nil
+                )
+            }
             .navigationDestination(for: String.self) { userName in
                 ChatView()
                     .environmentObject(nav)
-                    .environmentObject(viewModel)
+                    .environment(viewModel)
                     .onAppear {
                         text = .clear
                     }
             }
 
         }
-        .onTapGesture {
-            UIApplication.shared.sendAction(
-                #selector(UIResponder.resignFirstResponder),
-                to: nil,
-                from: nil,
-                for: nil
-            )
-        }
-        .tint(.white)
+        .tint(.primary)
         .alert(
             Constants.alertTitle,
             isPresented: $showAlert,
@@ -134,10 +134,10 @@ private extension StartView {
 private extension StartView {
 
     enum Constants {
-        static let alertTitle = "Ошибка входа"
-        static let title = "Welcome to\nRealTimeMessenger"
-        static let placeholder = "Введите имя пользователя"
-        static let startMesseging = "Войти в чат"
+        static let alertTitle = String(localized: "Login error")
+        static let title = String(localized: "Welcome to") + "\nRealTimeMessenger"
+        static let placeholder = String(localized: "Enter the user name")
+        static let startMesseging = String(localized: "Join the chat")
         static let bgColor = MKRColor<BackgroundPalette>.bgSecondary.color
         static let bgGradient = LinearGradient(
             colors: [.pink, .purple],

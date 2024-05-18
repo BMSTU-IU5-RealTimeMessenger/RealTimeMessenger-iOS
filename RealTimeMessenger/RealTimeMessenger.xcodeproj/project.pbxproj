@@ -16,11 +16,13 @@
 		E502502F2B844ACD00FDC47E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502502E2B844ACD00FDC47E /* Message.swift */; };
 		E51A64112B8AF94D00647993 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A64102B8AF94C00647993 /* Aliases.swift */; };
 		E51A64132B8AFAA700647993 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A64122B8AFAA700647993 /* APIError.swift */; };
+		E52A01852BF955D8003D9077 /* ChatSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52A01842BF955D8003D9077 /* ChatSubview.swift */; };
 		E54BDBA22B86B96800E70B7A /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54BDBA12B86B96800E70B7A /* StartView.swift */; };
 		E54BDBA42B86BF8600E70B7A /* CGFloat+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54BDBA32B86BF8600E70B7A /* CGFloat+Extenstions.swift */; };
 		E54BDBA62B86D00900E70B7A /* UIDevice+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54BDBA52B86D00900E70B7A /* UIDevice+Extenstions.swift */; };
 		E56A9CAB2B85797100ECD187 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56A9CAA2B85797100ECD187 /* MessageBubble.swift */; };
 		E56A9CAD2B857B9000ECD187 /* View+Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56A9CAC2B857B9000ECD187 /* View+Extenstions.swift */; };
+		E5719F502BF91DD2009A5917 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E5719F4F2BF91DD2009A5917 /* Localizable.xcstrings */; };
 		E5808E222B82216C009283CE /* RealTimeMessengerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5808E212B82216C009283CE /* RealTimeMessengerApp.swift */; };
 		E5808E262B82216D009283CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5808E252B82216D009283CE /* Assets.xcassets */; };
 		E5808E292B82216D009283CE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5808E282B82216D009283CE /* Preview Assets.xcassets */; };
@@ -42,11 +44,13 @@
 		E502502E2B844ACD00FDC47E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E51A64102B8AF94C00647993 /* Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
 		E51A64122B8AFAA700647993 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		E52A01842BF955D8003D9077 /* ChatSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSubview.swift; sourceTree = "<group>"; };
 		E54BDBA12B86B96800E70B7A /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		E54BDBA32B86BF8600E70B7A /* CGFloat+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extenstions.swift"; sourceTree = "<group>"; };
 		E54BDBA52B86D00900E70B7A /* UIDevice+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extenstions.swift"; sourceTree = "<group>"; };
 		E56A9CAA2B85797100ECD187 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		E56A9CAC2B857B9000ECD187 /* View+Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extenstions.swift"; sourceTree = "<group>"; };
+		E5719F4F2BF91DD2009A5917 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E5808E1E2B82216C009283CE /* RealTimeMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealTimeMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5808E212B82216C009283CE /* RealTimeMessengerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealTimeMessengerApp.swift; sourceTree = "<group>"; };
 		E5808E252B82216D009283CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -113,6 +117,14 @@
 			path = WebSocket;
 			sourceTree = "<group>";
 		};
+		E52A01832BF9559B003D9077 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				E52A01842BF955D8003D9077 /* ChatSubview.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		E5808E152B82216C009283CE = {
 			isa = PBXGroup;
 			children = (
@@ -154,6 +166,7 @@
 			children = (
 				E5808E252B82216D009283CE /* Assets.xcassets */,
 				E5808E272B82216D009283CE /* Preview Content */,
+				E5719F4F2BF91DD2009A5917 /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -216,6 +229,7 @@
 		E5BDFC302B82E7BF002E0B7E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E52A01832BF9559B003D9077 /* Subviews */,
 				E5BDFC2D2B82DF06002E0B7E /* ChatView.swift */,
 				E56A9CAA2B85797100ECD187 /* MessageBubble.swift */,
 			);
@@ -302,6 +316,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = E5808E152B82216C009283CE;
 			productRefGroup = E5808E1F2B82216C009283CE /* Products */;
@@ -320,6 +335,7 @@
 			files = (
 				E5808E292B82216D009283CE /* Preview Assets.xcassets in Resources */,
 				E5808E262B82216D009283CE /* Assets.xcassets in Resources */,
+				E5719F502BF91DD2009A5917 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,6 +353,7 @@
 				E5BDFC342B82ED3D002E0B7E /* ChatMessage.swift in Sources */,
 				E50250252B84371700FDC47E /* MKRColor.swift in Sources */,
 				E50250282B84478500FDC47E /* Date+Extenstions.swift in Sources */,
+				E52A01852BF955D8003D9077 /* ChatSubview.swift in Sources */,
 				E5BDFC2E2B82DF06002E0B7E /* ChatView.swift in Sources */,
 				E5BDFC362B82ED4B002E0B7E /* ChatViewModel.swift in Sources */,
 				E502502C2B8448E000FDC47E /* Navigation.swift in Sources */,

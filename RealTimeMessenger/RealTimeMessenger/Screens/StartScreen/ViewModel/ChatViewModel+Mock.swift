@@ -7,6 +7,13 @@
 
 import Foundation
 
+#if DEBUG
+
+extension ChatViewModel {
+
+    static let mockData = ChatViewModel(messages: .mockData, userName: "mightyK1ngRichard")
+}
+
 extension String {
 
     static let message = """
@@ -24,3 +31,6 @@ extension [ChatMessage] {
         .init(isYou: false, message: "Воу, ну это рил неплохо", userName: "poly", time: "10:16"),
     ]
 }
+
+
+#endif

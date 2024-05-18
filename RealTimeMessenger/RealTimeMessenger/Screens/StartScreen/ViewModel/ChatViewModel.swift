@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Observation
 
 // MARK: - ChatViewModelProtocol
 
@@ -17,10 +18,21 @@ protocol ChatViewModelProtocol: AnyObject {
 
 // MARK: - ChatViewModel
 
-final class ChatViewModel: ObservableObject {
-    @Published private(set) var messages: [ChatMessage] = []
-    @Published private(set) var lastMessageID: UUID?
-    @Published private(set) var userName: String = .clear
+@Observable
+final class ChatViewModel {
+    private(set) var messages: [ChatMessage] = []
+    private(set) var lastMessageID: String?
+    private(set) var userName: String = .clear
+
+    init(
+        messages: [ChatMessage] = [],
+        lastMessageID: String? = nil,
+        userName: String = .clear
+    ) {
+        self.messages = messages
+        self.lastMessageID = lastMessageID
+        self.userName = userName
+    }
 }
 
 // MARK: - ChatViewModelProtocol
@@ -44,7 +56,7 @@ extension ChatViewModel: ChatViewModelProtocol {
             mainQueueCompletion(nil)
             WebSockerManager.shared.send(
                 message: Message(
-                    id: UUID(),
+                    id: UUID().uuidString,
                     kind: .connection,
                     userName: userName,
                     dispatchDate: Date(),
@@ -58,7 +70,7 @@ extension ChatViewModel: ChatViewModelProtocol {
     /// Sending message to the server
     func sendMessage(message: String) {
         let msg = Message(
-            id: UUID(),
+            id: UUID().uuidString,
             kind: .message,
             userName: userName,
             dispatchDate: Date(),
@@ -108,7 +120,7 @@ private extension ChatViewModel {
 #if DEBUG
 extension ChatViewModel {
 
-    func setPreviewData(name: String, messages: [ChatMessage] = .mockData, lastMessage: UUID? = nil) {
+    func setPreviewData(name: String, messages: [ChatMessage] = .mockData, lastMessage: String? = nil) {
         self.userName = name
         self.messages = messages
         self.lastMessageID = lastMessage
